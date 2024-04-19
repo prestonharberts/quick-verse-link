@@ -1,134 +1,145 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, editorEditorField } from 'obsidian';
 
-// Remember to rename these classes and interfaces!
-
-interface MyPluginSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
-}
-
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
-
+export default class QuickVerseLink extends Plugin {
 	async onload() {
-		await this.loadSettings();
-
-		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
-		});
-		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
-
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
-
-		// This adds a simple command that can be triggered anywhere
+		console.log('loading Quick Verse Link plugin')
+		// this adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
-			id: 'open-sample-modal-simple',
-			name: 'Open sample modal (simple)',
-			callback: () => {
-				new SampleModal(this.app).open();
-			}
-		});
-		// This adds an editor command that can perform some operation on the current editor instance
-		this.addCommand({
-			id: 'sample-editor-command',
-			name: 'Sample editor command',
+			id: 'quick-verse-link',
+			name: 'Quick Verse Link',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
-			}
-		});
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
-		this.addCommand({
-			id: 'open-sample-modal-complex',
-			name: 'Open sample modal (complex)',
-			checkCallback: (checking: boolean) => {
-				// Conditions to check
-				const markdownView = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (markdownView) {
-					// If checking is true, we're simply "checking" if the command can be run.
-					// If checking is false, then we want to actually perform the operation.
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-
-					// This command will only show up in Command Palette when the check function returns true
-					return true;
-				}
+				this.openPrompt(editor)
 			}
 		});
 
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
+		// if the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
 		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
 			console.log('click', evt);
 		});
 
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
+		// when registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
-	onunload() {
-
+	openPrompt(editor: Editor) {
+		const modal = new VerseModal(this.app, editor);
+		modal.open();
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
 }
 
-class SampleModal extends Modal {
-	constructor(app: App) {
+
+
+class VerseModal extends Modal {
+	editor: Editor
+	onSubmit: (result: string) => void;
+	constructor(app: App, editor: Editor) {
 		super(app);
+		this.editor = editor
 	}
 
 	onOpen() {
-		const {contentEl} = this;
-		contentEl.setText('Woah!');
+		const { contentEl } = this;
+
+		contentEl.createEl('h5', { text: 'Enter verse reference' });
+		contentEl.style.marginTop = '-16px';
+
+		const inputEl = contentEl.createEl('input');
+		inputEl.type = 'text';
+		inputEl.placeholder = 'Example: 2cor4 16 18 → 2 Corinthians 4:16-18';
+		inputEl.style.width = '100%';
+		inputEl.style.margin = 'auto';
+
+
+		inputEl.addEventListener('keydown', async (event) => {
+			if (event.key === 'Enter') {
+				event.preventDefault(); // Prevent the default behavior
+				const verseRef = inputEl.value;
+				await this.insertVerseLink(verseRef);
+				this.close();
+			}
+		});
+
+	}
+
+	async insertVerseLink(verseRef: string) {
+		console.log('inserting verse link');
+		const shortArr1 = ['gen', 'ex', 'lev', 'num', 'deut', 'josh', 'judg', 'ruth', '1sam', '2sam', '1kings', '2kings', '1chron', '2chron', 'ezra', 'neh', 'est', 'job', 'ps', 'prov', 'eccles', 'song', 'isa', 'jer', 'lam', 'ezek', 'dan', 'hos', 'joel', 'amos', 'obad', 'jonah', 'mic', 'nah', 'hab', 'zeph', 'hag', 'zech', 'mal', 'matt', 'mark', 'luke', 'john', 'acts', 'rom', '1cor', '2cor', 'gal', 'eph', 'phil', 'col', '1thess', '2thess', '1tim', '2tim', 'titus', 'philem', 'heb', 'james', '1pet', '2pet', '1john', '2john', '3john', 'jude', 'rev'];
+		const shortArr2 = ['ge', 'exod', 'le', 'nu', 'de', 'jos', 'jdg', 'rth', '1sm', '2sm', '1kgs', '2kgs', '1chr', '2chr', 'ezr', 'ne', 'est', 'jb', 'psalm', 'pro', 'eccle', 'sos', 'is', 'je', 'la', 'eze', 'da', 'ho', 'jl', 'am', 'ob', 'jnh', 'mc', 'na', 'hb', 'zep', 'hg', 'zec', 'ml', 'mt', 'mrk', 'luk', 'joh', 'act', 'ro', '1co', '2co', 'ga', 'ephes', 'php', 'co', '1thes', '2thes', '1ti', '2ti', 'tit', 'phm', '', 'jas', '1pe', '2pe', '1jhn', '2jhn', '3jhn', 'jud', 're'];
+		const shortArr3 = ['gn', 'exo', 'lv', 'nm', 'dt', 'jsh', 'jg', 'ru', '1sa', '2sa', '1ki', '2ki', '1ch', '2ch', 'ez', '', 'es', '', 'pslm', 'prv', 'ecc', 'so', '', 'jr', '', 'ezk', 'dn', '', '', '', '', 'jon', '', '', '', 'zp', '', 'zc', '', 'mt', 'mar', 'lk', 'jhn', 'ac', 'rm', '', '', '', '', 'pp', '', '1th', '2th', '', '', 'ti', 'pm', '', 'jm', '1pt', '2pt', '1jn', '2jn', '3hn', 'jd', ''];
+		const shortArr4 = ['', '', '', 'nb', '', '', 'jdgs', '', '1s', '2s', '1k', '2k', '', '', '', '', '', '', 'psa', 'pr', 'ec', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'mk', '', 'jn', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '1p', '2p', '1j', '2j', '3j', '', ''];
+		const longArr = ['Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', 'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi', 'Matthew', 'Mark', 'Luke', 'John', 'Acts', 'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians', 'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians', '1 Timothy', '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James', '1 Peter', '2 Peter', '1 John', '2 John', '3 John', 'Jude', 'Revelation'];
+
+		// extract book, chapter, and verse from input
+		const matchChapter = verseRef.match(/[v;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]*$/);
+		const matchVerse = verseRef.match(/[v;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+		const matchSection = verseRef.match(/[v;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+
+		const vMatchVerse = verseRef.match(/[;: ]*v[;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+		const vMatchSection = verseRef.match(/[;: ]*v[;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+		const VMatchVerse = verseRef.match(/[;: ]*V[;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+		const VMatchSection = verseRef.match(/[;: ]*V[;: ]*([1-3]*[a-z]+)[;: ]*([0-9]+)[;: ]+([0-9]+)[;: ]+([0-9]+)[;: ]*$/);
+
+		let match = matchChapter;
+		if (!matchChapter) {
+			match = matchVerse;
+			if (!matchVerse) {
+				match = matchSection;
+				if (!matchSection) {
+					new Notice('Invalid verse reference format.');
+					return '';
+				}
+			}
+		}
+		if (match) {
+			// find book name
+			let shortBook = match[1];
+			let longBook = '';
+			for (let i = 0; i < 66; i++) {
+				if (shortBook === shortArr1[i] || shortBook === shortArr2[i] || shortBook === shortArr3[i] || shortBook === shortArr4[i]) {
+					shortBook = shortArr1[i];
+					longBook = longArr[i];
+					break;
+				}
+			}
+			// Construct verse link
+			let link: string = '';
+			// Use expansion to construct the link
+			if (matchChapter) {
+				const chapter = matchChapter[2];
+				link = `[[${shortBook}${chapter}|${longBook} ${chapter}]]`;
+			} else if (matchVerse) {
+				const chapter = matchVerse[2];
+				const verse = matchVerse[3];
+				if (!vMatchVerse && !VMatchVerse) {
+					link = `[[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}]]`;
+				} else if (vMatchVerse) {
+					link = `[[${shortBook}${chapter}#${verse}|verse ${verse}]]`;
+				} else if (VMatchVerse) {
+					link = `[[${shortBook}${chapter}#${verse}|Verse ${verse}]]`;
+				}
+			} else if (matchSection) {
+				const chapter = matchSection[2];
+				const verse = matchSection[3];
+				const verseLast = matchSection[4];
+				if (!vMatchSection && !VMatchSection) {
+					link = `[[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}-${verseLast}]]`;
+				} else if (vMatchSection) {
+					link = `[[${shortBook}${chapter}#${verse}|verses ${verse}-${verseLast}]]`;
+				} else if (VMatchSection) {
+					link = `[[${shortBook}${chapter}#${verse}|Verses ${verse}-${verseLast}]]`;
+				}
+			}
+			// Print verse link
+			this.editor.replaceSelection(link);
+		}
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
+		// let { contentEl } = this;
 		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		const {containerEl} = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
 	}
 }
