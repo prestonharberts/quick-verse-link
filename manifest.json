@@ -1,7 +1,7 @@
 {
 	"id": "quick-verse-link",
 	"name": "Quick Verse Link",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Insert verse links quickly into Obsidian by entering the verse reference into a modal form.",
 	"author": "Preston Harberts",
