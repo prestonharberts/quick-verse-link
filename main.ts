@@ -77,6 +77,8 @@ class VerseModal extends Modal {
 		const matchVerse = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+) *$/);
 		const matchSection = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+) *$/);
 
+		const vMatchChapter = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-\9]+) *$/);
+		const VMatchChapter = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-\9]+) *$/);
 		const vMatchVerse = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const vMatchSection = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const VMatchVerse = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
@@ -112,7 +114,13 @@ class VerseModal extends Modal {
 			// Use expansion to construct the link
 			if (matchChapter) {
 				const chapter = matchChapter[2];
-				link = `[[${shortBook}${chapter}|${longBook} ${chapter}]]`;
+				if (!vMatchChapter && !VMatchChapter) {
+					link = `[[${shortBook}${chapter}|${longBook} ${chapter}]]`;
+				} else if (vMatchChapter) {
+					link = `[[${shortBook}${chapter}|chapter ${chapter}]]`;
+				} else if (VMatchChapter) {
+					link = `[[${shortBook}${chapter}|Chapter ${chapter}]]`;
+				}
 			} else if (matchVerse) {
 				const chapter = matchVerse[2];
 				const verse = matchVerse[3];
