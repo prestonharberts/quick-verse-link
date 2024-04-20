@@ -77,7 +77,7 @@ class VerseModal extends Modal {
 		const matchVerse = verseRef.match(/[v;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+) *$/);
 		const matchSection = verseRef.match(/[v;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+) *$/);
 
-		const vMatchVerse = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0\-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+		const vMatchVerse = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const vMatchSection = verseRef.match(/[;: ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const VMatchVerse = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const VMatchSection = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
