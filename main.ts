@@ -12,6 +12,18 @@ export default class QuickVerseLink extends Plugin {
 				this.openPrompt(editor)
 			}
 		});
+		this.addCommand({
+			id: 'insert-paragraph-symbol',
+			name: 'Insert Paragraph Symbol in Link',
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				console.log(editor.getSelection());
+				this.insertParagraphSymbol(editor);
+
+			}
+		});
+
+
+
 
 		// if the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -26,6 +38,30 @@ export default class QuickVerseLink extends Plugin {
 	openPrompt(editor: Editor) {
 		const modal = new VerseModal(this.app, editor);
 		modal.open();
+	}
+	insertParagraphSymbol(editor: Editor) {
+		const cursor = editor.getCursor();
+		const line = cursor.line;
+
+		const lineText = editor.getLine(line);
+
+		const linkRegex = /\[\[[^\]]+\]\]/g;
+		let newText = lineText;
+
+		let match;
+		while ((match = linkRegex.exec(lineText)) !== null) {
+			const linkStart = match.index;
+			const linkEnd = match.index + match[0].length;
+			if (cursor.ch >= linkStart && cursor.ch <= linkEnd) {
+				const linkText = lineText.substring(linkStart, linkEnd);
+				const replacedLinkText = linkText.replace(/#(?=[^\]]*?\])/g, '#¶ ');
+				newText = newText.substring(0, linkStart) + replacedLinkText + newText.substring(linkEnd);
+			}
+		}
+
+		if (newText !== lineText) {
+			editor.replaceRange(newText, { line: line, ch: 0 }, { line: line, ch: lineText.length });
+		}
 	}
 
 }
