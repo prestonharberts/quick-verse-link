@@ -43,11 +43,10 @@ export default class QuickVerseLink extends Plugin {
 	insertParagraphSymbol(editor: Editor) {
 		const cursor = editor.getCursor();
 		const line = cursor.line;
-
 		const lineText = editor.getLine(line);
-
 		const linkRegex = /\[\[[^\]]+\]\]/g;
 		let newText = lineText;
+		let newCursorPos: { line: number, ch: number } | null = null;
 
 		let match;
 		while ((match = linkRegex.exec(lineText)) !== null) {
@@ -57,11 +56,15 @@ export default class QuickVerseLink extends Plugin {
 				const linkText = lineText.substring(linkStart, linkEnd);
 				const replacedLinkText = linkText.replace(/#(?=[^\]]*?\])/g, '#¶ ');
 				newText = newText.substring(0, linkStart) + replacedLinkText + newText.substring(linkEnd);
+				const cursorOffset = replacedLinkText.length - linkText.length;
+				newCursorPos = { line: cursor.line, ch: cursor.ch + cursorOffset };
 			}
 		}
-
 		if (newText !== lineText) {
 			editor.replaceRange(newText, { line: line, ch: 0 }, { line: line, ch: lineText.length });
+			if (newCursorPos) {
+				editor.setCursor(newCursorPos.line, newCursorPos.ch);
+			}
 		}
 	}
 }
