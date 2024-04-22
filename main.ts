@@ -39,6 +39,7 @@ export default class QuickVerseLink extends Plugin {
 		const modal = new VerseModal(this.app, editor);
 		modal.open();
 	}
+
 	insertParagraphSymbol(editor: Editor) {
 		const cursor = editor.getCursor();
 		const line = cursor.line;
@@ -63,7 +64,6 @@ export default class QuickVerseLink extends Plugin {
 			editor.replaceRange(newText, { line: line, ch: 0 }, { line: line, ch: lineText.length });
 		}
 	}
-
 }
 
 
