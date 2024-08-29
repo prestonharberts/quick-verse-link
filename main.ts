@@ -114,12 +114,12 @@ class VerseModal extends Modal {
 
 		// extract book, chapter, and verse from input
 		const matchBook = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*$/);
-		const matchChapter = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-\9]+)[;:\- ]*$/);
+		const matchChapter = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
 		const matchVerse = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const matchSection = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 
-		const vMatchChapter = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-\9]+)[;:\- ]*$/);
-		const VMatchChapter = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-\9]+)[;:\- ]*$/);
+		const vMatchChapter = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
+		const VMatchChapter = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
 		const vMatchVerse = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const vMatchSection = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const VMatchVerse = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
