@@ -88,6 +88,7 @@ class VerseModal extends Modal {
 		const inputEl = contentEl.createEl('input');
 		inputEl.type = 'text';
 		inputEl.placeholder = 'Example: 2cor4 16 18 → 2 Corinthians 4:16-18';
+		inputEl.style.textAlign = 'center';
 		inputEl.style.width = '100%';
 		inputEl.style.margin = 'auto';
 
