@@ -96,12 +96,17 @@ class VerseModal extends Modal {
 		const shortArr3 = ['gn', 'exo', 'lv', 'nm', 'dt', 'jsh', 'jg', 'ru', '1sa', '2sa', '1ki', '2ki', '1ch', '2ch', 'ez', '', 'es', '', 'pslm', 'prv', 'ecc', 'so', '', 'jr', '', 'ezk', 'dn', '', '', '', '', 'jon', '', '', '', 'zp', '', 'zc', '', 'mt', 'mar', 'lk', 'jhn', 'ac', 'rm', '', '', '', '', 'pp', '', '1th', '2th', '', '', 'ti', 'pm', '', 'jm', '1pt', '2pt', '1jn', '2jn', '3hn', 'jd', ''];
 		const shortArr4 = ['', '', '', 'nb', '', '', 'jdgs', '', '1s', '2s', '1k', '2k', '', '', '', '', '', '', 'psa', 'pr', 'ec', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'mk', '', 'jn', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '1p', '2p', '1j', '2j', '3j', '', ''];
 		const longArr = ['Genesis', 'Exodus', 'Leviticus', 'Numbers', 'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', '1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', 'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', 'Song of Solomon', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', 'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', 'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi', 'Matthew', 'Mark', 'Luke', 'John', 'Acts', 'Romans', '1 Corinthians', '2 Corinthians', 'Galatians', 'Ephesians', 'Philippians', 'Colossians', '1 Thessalonians', '2 Thessalonians', '1 Timothy', '2 Timothy', 'Titus', 'Philemon', 'Hebrews', 'James', '1 Peter', '2 Peter', '1 John', '2 John', '3 John', 'Jude', 'Revelation'];
+		const abbArr = ['Gen', 'Ex', 'Lev', 'Num', 'Deut', 'Josh', 'Judg', 'Ruth', '1 Sam', '2 Sam', '1 Kings', '2 Kings', '1 Chron', '2 Chron', 'Ezra', 'Neh', 'Est', 'Job', 'Ps', 'Prov', 'Eccles', 'Song', 'Isa', 'Jer', 'Lam', 'Ezek', 'Dan', 'Hos', 'Joel', 'Amos', 'Obad', 'Jonah', 'Mic', 'Nah', 'Hab', 'Zeph', 'Hag', 'Zech', 'Mal', 'Matt', 'Mark', 'Luke', 'John', 'Acts', 'Rom', '1 Cor', '2 Cor', 'Gal', 'Eph', 'Phil', 'Col', '1 Thess', '2 Thess', '1 Tim', '2 Tim', 'Titus', 'Philem', 'Heb', 'James', '1 Pet', '2 Pet', '1 John', '2 John', '3 John', 'Jude', 'Rev'];
 
 		// extract book, chapter, and verse from input
 		const matchBook = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*$/);
-		const matchChapter = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
-		const matchVerse = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
-		const matchSection = verseRef.match(/[vw;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+		const matchChapter = verseRef.match(/[bvwx;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
+		const matchVerse = verseRef.match(/[bvwx;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+		const matchSection = verseRef.match(/[bvwx;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+
+		const bMatchChapter = verseRef.match(/[;:\- ]*b[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
+		const bMatchVerse = verseRef.match(/[;:\- ]*b[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+		const bMatchSection = verseRef.match(/[;:\- ]*b[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 
 		const vMatchChapter = verseRef.match(/[;:\- ]*v[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
 		const VMatchChapter = verseRef.match(/[;:\- ]*V[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
@@ -112,6 +117,10 @@ class VerseModal extends Modal {
 
 		const wMatchVerse = verseRef.match(/[;:\- ]*w[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 		const wMatchSection = verseRef.match(/[;:\- ]*w[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+
+		const xMatchChapter = verseRef.match(/[;:\- ]*x[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]*$/);
+		const xMatchVerse = verseRef.match(/[;:\- ]*x[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
+		const xMatchSection = verseRef.match(/[;:\- ]*x[;:\- ]*([1-3]* *[a-z]+)[;:\- ]*([0-9]+)[;:\- ]+([0-9]+)[;:\- ]+([0-9]+)[;:\- ]*$/);
 
 		let match = matchBook;
 		if (!matchBook) {
@@ -131,10 +140,12 @@ class VerseModal extends Modal {
 			// find book name
 			let shortBook = match[1].toLowerCase();
 			let longBook = '';
+			let abbBook = '';
 			for (let i = 0; i < 66; i++) {
 				if (shortBook === shortArr1[i] || shortBook === shortArr2[i] || shortBook === shortArr3[i] || shortBook === shortArr4[i] || shortBook === longArr[i]) {
 					shortBook = shortArr1[i];
 					longBook = longArr[i];
+					abbBook = abbArr[i];
 					break;
 				}
 			}
@@ -146,37 +157,61 @@ class VerseModal extends Modal {
 			}
 			if (matchChapter) {
 				const chapter = matchChapter[2];
-				if (!vMatchChapter && !VMatchChapter) {
+				if (!bMatchChapter && !vMatchChapter && !VMatchChapter && !xMatchChapter) {
 					link = `[[${shortBook}${chapter}|${longBook} ${chapter}]]`;
+				} else if (bMatchChapter) {
+					link = `[[${shortBook}${chapter}|${abbBook}. ${chapter}]]`;
 				} else if (vMatchChapter) {
 					link = `[[${shortBook}${chapter}|chapter ${chapter}]]`;
 				} else if (VMatchChapter) {
 					link = `[[${shortBook}${chapter}|Chapter ${chapter}]]`;
+				} else if (xMatchChapter) {
+					link = `## <span class="larrow"></span> [[${shortBook}${chapter}|${longBook} ${chapter}]] <span class="rarrow"></span>\n`
+					link += `<div class="embed-break"></div>\n`
+					link += `![[${shortBook}${chapter}embed|${longBook} ${chapter}]]`;
 				}
 			} else if (matchVerse) {
 				const chapter = matchVerse[2];
 				const verse = matchVerse[3];
-				if (!vMatchVerse && !VMatchVerse && !wMatchVerse) {
+				if (!bMatchVerse && !vMatchVerse && !VMatchVerse && !wMatchVerse && !xMatchVerse) {
 					link = `[[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}]]`;
+				} else if (bMatchVerse) {
+					link = `[[${shortBook}${chapter}#${verse}|${abbBook}. ${chapter}:${verse}]]`;
 				} else if (vMatchVerse) {
 					link = `[[${shortBook}${chapter}#${verse}|verse ${verse}]]`;
 				} else if (VMatchVerse) {
 					link = `[[${shortBook}${chapter}#${verse}|Verse ${verse}]]`;
 				} else if (wMatchVerse) {
 					link = `[[${shortBook}${chapter}#${verse}|${chapter}:${verse}]]`;
+				} else if (xMatchVerse) {
+					link = `## <span class="larrow"></span> [[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}]] <span class="rarrow"></span>\n`
+					link += `<div class="embed-break"></div>\n`
+					link += `![[${shortBook}${chapter}embed#${verse}|${longBook} ${chapter}:${verse}]]`;
 				}
 			} else if (matchSection) {
 				const chapter = matchSection[2];
 				const verse = matchSection[3];
 				const verseLast = matchSection[4];
-				if (!vMatchSection && !VMatchSection && !wMatchSection) {
+				if (!bMatchSection && !vMatchSection && !VMatchSection && !wMatchSection && !xMatchSection) {
 					link = `[[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}-${verseLast}]]`;
+				} else if (bMatchSection) {
+					link = `[[${shortBook}${chapter}#${verse}|${abbBook}. ${chapter}:${verse}-${verseLast}]]`;
 				} else if (vMatchSection) {
 					link = `[[${shortBook}${chapter}#${verse}|verses ${verse}-${verseLast}]]`;
 				} else if (VMatchSection) {
 					link = `[[${shortBook}${chapter}#${verse}|Verses ${verse}-${verseLast}]]`;
 				} else if (wMatchSection) {
 					link = `[[${shortBook}${chapter}#${verse}|${chapter}:${verse}-${verseLast}]]`;
+				} else if (xMatchSection) {
+					let start = parseInt(verse, 10);
+					let end = parseInt(verseLast, 10);
+					let i = start;
+					link = `## <span class="larrow"></span> [[${shortBook}${chapter}#${verse}|${longBook} ${chapter}:${verse}-${verseLast}]] <span class="rarrow"></span>\n`
+					link += `<div class="embed-break"></div>\n`
+					link += `![[${shortBook}${chapter}embed#${i}|${longBook} ${chapter}:${i}]]\n`;
+					for (++i; i < end; i++)
+						link += `![[${shortBook}${chapter}embed#${i}|${longBook} ${chapter}:${i}]]\n`;
+					link += `![[${shortBook}${chapter}embed#${i}|${longBook} ${chapter}:${i}]]`;
 				}
 			}
 			// Print verse link
