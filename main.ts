@@ -21,18 +21,6 @@ export default class QuickVerseLink extends Plugin {
 
 			}
 		});
-
-
-
-
-		// if the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		// when registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	openPrompt(editor: Editor) {
@@ -69,8 +57,6 @@ export default class QuickVerseLink extends Plugin {
 	}
 }
 
-
-
 class VerseModal extends Modal {
 	editor: Editor
 	onSubmit: (result: string) => void;
@@ -91,7 +77,6 @@ class VerseModal extends Modal {
 		inputEl.style.textAlign = 'center';
 		inputEl.style.width = '100%';
 		inputEl.style.margin = 'auto';
-
 
 		inputEl.addEventListener('keydown', async (event) => {
 			if (event.key === 'Enter') {
